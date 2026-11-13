@@ -1,0 +1,2224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Механическое движение | Физика</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
+:root {
+    --bg: #f4f6f2;
+    --white: #ffffff;
+    --green: #729b88;
+    --dark: #263d36;
+    --mint: #dceee5;
+    --blue: #dce9f5;
+    --pink: #f6e4e3;
+    --yellow: #f8efce;
+    --text: #35443e;
+    --muted: #7e8c84;
+    --shadow: 0 12px 35px rgba(44,70,57,.08);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.progress-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 0%;
+    background: #729b88;
+    z-index: 1000;
+    transition: width .2s;
+}
+
+/* Фоновые декоративные элементы */
+
+.decor {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(2px);
+}
+
+.decor.one {
+    width: 280px;
+    height: 280px;
+    background: #dceee5;
+    top: 100px;
+    right: -130px;
+    opacity: .55;
+}
+
+.decor.two {
+    width: 220px;
+    height: 220px;
+    background: #dce9f5;
+    bottom: 100px;
+    left: -100px;
+    opacity: .55;
+}
+
+/* Шапка */
+
+header {
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid #e8eee9;
+    padding: 17px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.logo span {
+    color: var(--green);
+}
+
+.header-right {
+    color: var(--muted);
+    font-size: 12px;
+    text-align: right;
+}
+
+/* Главный экран */
+
+.hero {
+    padding: 85px 8% 75px;
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    background: linear-gradient(120deg,#e4f0e9,#edf3f7,#f8f1e8);
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.label {
+    display: inline-block;
+    padding: 9px 17px;
+    border-radius: 30px;
+    background: white;
+    color: #729b88;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px,5vw,65px);
+    line-height: 1.13;
+    color: #29443a;
+    margin-bottom: 22px;
+}
+
+.hero p {
+    color: #65766e;
+    line-height: 1.9;
+    font-size: 15px;
+    max-width: 570px;
+}
+
+.teacher {
+    margin-top: 25px;
+    font-size: 13px;
+    color: #557366;
+    font-weight: 700;
+}
+
+.hero-art {
+    font-size: 140px;
+    animation: float 4s ease-in-out infinite;
+    filter: drop-shadow(0 15px 15px rgba(70,100,80,.15));
+}
+
+@keyframes float {
+    0%,100% {transform:translateY(0)}
+    50% {transform:translateY(-18px)}
+}
+
+/* Кнопки */
+
+.main-btn {
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 13px;
+    font-weight: 800;
+    margin-top: 28px;
+    transition: .3s;
+}
+
+.main-btn:hover {
+    background: #547e69;
+    transform: translateY(-3px);
+}
+
+/* Основная структура */
+
+.layout {
+    display: grid;
+    grid-template-columns: 255px 1fr;
+    gap: 35px;
+    max-width: 1450px;
+    margin: 50px auto;
+    padding: 0 5%;
+}
+
+/* Боковое меню */
+
+.sidebar {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+    background: white;
+    padding: 24px;
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+}
+
+.sidebar h3 {
+    font-size: 15px;
+    margin-bottom: 17px;
+    color: var(--dark);
+}
+
+.menu-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 11px 12px;
+    margin: 4px 0;
+    border-radius: 10px;
+    color: #68786f;
+    font-size: 12px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.menu-item:hover,
+.menu-item.active {
+    background: var(--mint);
+    color: #365e49;
+}
+
+.menu-item span {
+    margin-right: 8px;
+}
+
+.sidebar-progress {
+    background: #edf2ee;
+    height: 7px;
+    border-radius: 10px;
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.sidebar-progress div {
+    width: 0%;
+    height: 100%;
+    background: var(--green);
+    transition: .3s;
+}
+
+.progress-text {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+}
+
+/* Контент */
+
+.content {
+    min-width: 0;
+}
+
+.lesson-section {
+    background: white;
+    padding: 38px;
+    border-radius: 23px;
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+    scroll-margin-top: 105px;
+    animation: appear .7s ease;
+}
+
+@keyframes appear {
+    from {opacity:0; transform:translateY(15px)}
+    to {opacity:1; transform:translateY(0)}
+}
+
+.section-number {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 13px;
+}
+
+.lesson-section h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--dark);
+    font-size: 29px;
+    margin-bottom: 20px;
+}
+
+.lesson-section h3 {
+    font-size: 17px;
+    margin: 25px 0 12px;
+    color: #456554;
+}
+
+.lesson-section p {
+    line-height: 1.9;
+    font-size: 14px;
+    margin-bottom: 14px;
+    color: #617168;
+}
+
+.lesson-section ul {
+    padding-left: 23px;
+    color: #617168;
+    line-height: 2;
+    font-size: 14px;
+    margin: 15px 0;
+}
+
+/* Карточки */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 15px;
+    margin: 22px 0;
+}
+
+.info-card {
+    padding: 22px;
+    border-radius: 17px;
+    background: var(--mint);
+}
+
+.info-card.blue {background:var(--blue)}
+.info-card.pink {background:var(--pink)}
+.info-card.yellow {background:var(--yellow)}
+
+.info-card .icon {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.info-card h4 {
+    margin-bottom: 9px;
+    color: #365448;
+}
+
+.info-card p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* Определения */
+
+.definition {
+    background: #edf5ef;
+    border-left: 5px solid #79a48c;
+    padding: 22px;
+    border-radius: 12px;
+    margin: 20px 0;
+    line-height: 1.9;
+    font-size: 14px;
+    color: #456554;
+}
+
+.example {
+    background: #f5f7fa;
+    padding: 22px;
+    border-radius: 15px;
+    margin: 20px 0;
+    line-height: 1.9;
+    font-size: 14px;
+}
+
+.example strong {
+    color: #426a56;
+}
+
+.formula {
+    background: #e9f1f6;
+    text-align: center;
+    padding: 25px;
+    border-radius: 17px;
+    margin: 20px 0;
+}
+
+.formula .math {
+    font-size: 28px;
+    font-weight: 800;
+    color: #426b78;
+    margin: 10px;
+}
+
+.formula small {
+    color: #73878d;
+    line-height: 1.8;
+}
+
+/* Иллюстрации движения */
+
+.motion-box {
+    background: linear-gradient(135deg,#e8f2eb,#edf3f8);
+    padding: 25px;
+    border-radius: 17px;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.road {
+    height: 5px;
+    background: #849c8e;
+    position: relative;
+    margin: 45px 15px;
+    border-radius: 5px;
+}
+
+.car {
+    font-size: 40px;
+    position: absolute;
+    top: -43px;
+    left: 0;
+    animation: drive 5s linear infinite alternate;
+}
+
+@keyframes drive {
+    from {left:0}
+    to {left:85%}
+}
+
+.motion-caption {
+    text-align: center;
+    font-size: 12px;
+    color: #6b8075;
+}
+
+/* Таблицы */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13px;
+}
+
+th,td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #e7ede8;
+}
+
+th {
+    background: #e9f1ec;
+    color: #456554;
+}
+
+td {
+    color: #68786f;
+}
+
+/* Кнопки раскрытия */
+
+.reveal-btn {
+    border: none;
+    background: #729b88;
+    color: white;
+    padding: 11px 19px;
+    border-radius: 10px;
+    font-weight: 700;
+    margin-top: 12px;
+    font-size: 12px;
+}
+
+.answer {
+    display: none;
+    background: #e7f3e9;
+    padding: 18px;
+    border-radius: 12px;
+    margin-top: 15px;
+    line-height: 1.8;
+    font-size: 13px;
+}
+
+.answer.show {
+    display: block;
+}
+
+/* Практика */
+
+.task {
+    background: #f5f7f5;
+    border: 1px solid #e7ede8;
+    padding: 22px;
+    border-radius: 16px;
+    margin: 17px 0;
+}
+
+.task h4 {
+    color: #496d58;
+    margin-bottom: 12px;
+}
+
+.task p {
+    font-size: 13px;
+}
+
+/* Тест */
+
+.quiz-question {
+    background: #f6f8f6;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.quiz-question h4 {
+    font-size: 14px;
+    margin-bottom: 14px;
+    color: #405b4c;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: white;
+    border: 1px solid #e4ebe5;
+    border-radius: 10px;
+    padding: 13px;
+    margin: 8px 0;
+    color: #607168;
+    font-size: 12px;
+    transition: .2s;
+}
+
+.option:hover {
+    border-color: #729b88;
+    background: #edf5ef;
+}
+
+.option.selected {
+    background: #dceee5;
+    border-color: #729b88;
+}
+
+.option.correct {
+    background: #d7efdc;
+    border-color: #65a978;
+}
+
+.option.wrong {
+    background: #f7dddd;
+    border-color: #d77b7b;
+}
+
+.result {
+    display: none;
+    padding: 25px;
+    border-radius: 15px;
+    background: #e4f0e8;
+    text-align: center;
+    margin-top: 25px;
+}
+
+.result h3 {
+    margin-top: 0;
+}
+
+footer {
+    text-align: center;
+    padding: 40px 20px;
+    background: #e5eee8;
+    color: #688073;
+    font-size: 12px;
+    line-height: 2;
+}
+
+@media(max-width:900px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: relative;
+        top: 0;
+    }
+
+    .hero-art {
+        font-size: 90px;
+    }
+}
+
+@media(max-width:600px) {
+    .hero {
+        padding: 55px 7%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero-art {
+        display: none;
+    }
+
+    .lesson-section {
+        padding: 23px;
+    }
+
+    .lesson-section h2 {
+        font-size: 24px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        padding: 15px 5%;
+    }
+
+    .header-right {
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="progress-line" id="topProgress"></div>
+<div class="decor one"></div>
+<div class="decor two"></div>
+
+<header>
+    <div class="logo">PHYSICS <span>LAB</span> ⚛</div>
+    <div class="header-right">
+        ИЗУЧАЕМ ФИЗИКУ<br>
+        ОБРАЗОВАТЕЛЬНЫЙ ПРОЕКТ
+    </div>
+</header>
+
+<!-- ГЛАВНЫЙ ЭКРАН -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="label">УРОК ФИЗИКИ • 6–7 КЛАСС</div>
+
+        <h1>Механическое движение</h1>
+
+        <p>
+            Путь, траектория, перемещение и скорость.
+            Изучаем, как движутся тела, как измерять их движение
+            и как решать физические задачи.
+        </p>
+
+        <div class="teacher">
+            Преподаватель: Джураев Муслим Тариэльевич
+        </div>
+
+        <button class="main-btn"
+        onclick="document.getElementById('s1').scrollIntoView({behavior:'smooth'})">
+            Начать изучение →
+        </button>
+
+    </div>
+
+    <div class="hero-art">🚗</div>
+
+</section>
+
+
+<div class="layout">
+
+<!-- МЕНЮ -->
+
+<aside class="sidebar">
+
+    <h3>📚 Содержание урока</h3>
+
+    <button class="menu-item active" onclick="go('s1',this)">
+        <span>01</span> Механическое движение
+    </button>
+
+    <button class="menu-item" onclick="go('s2',this)">
+        <span>02</span> Материальная точка
+    </button>
+
+    <button class="menu-item" onclick="go('s3',this)">
+        <span>03</span> Точка отсчёта
+    </button>
+
+    <button class="menu-item" onclick="go('s4',this)">
+        <span>04</span> Путь
+    </button>
+
+    <button class="menu-item" onclick="go('s5',this)">
+        <span>05</span> Траектория
+    </button>
+
+    <button class="menu-item" onclick="go('s6',this)">
+        <span>06</span> Перемещение
+    </button>
+
+    <button class="menu-item" onclick="go('s7',this)">
+        <span>07</span> Скорость
+    </button>
+
+    <button class="menu-item" onclick="go('s8',this)">
+        <span>08</span> Формулы движения
+    </button>
+
+    <button class="menu-item" onclick="go('s9',this)">
+        <span>09</span> Решённые задачи
+    </button>
+
+    <button class="menu-item" onclick="go('s10',this)">
+        <span>10</span> Перевод скорости
+    </button>
+
+    <button class="menu-item" onclick="go('s11',this)">
+        <span>11</span> Практика
+    </button>
+
+    <button class="menu-item" onclick="go('s12',this)">
+        <span>12</span> Итоговый тест
+    </button>
+
+    <div class="sidebar-progress">
+        <div id="sideProgress"></div>
+    </div>
+
+    <div class="progress-text" id="progressText">
+        Прогресс изучения: 0%
+    </div>
+
+</aside>
+
+
+<!-- ОСНОВНОЙ УРОК -->
+
+<main class="content">
+
+
+<!-- 1 -->
+
+<section class="lesson-section" id="s1">
+
+    <div class="section-number">ТЕМА 01</div>
+
+    <h2>Что такое механическое движение?</h2>
+
+    <p>
+        Посмотри вокруг. Автомобили едут по дорогам,
+        люди идут по улицам, птицы летают в небе.
+        Все эти тела меняют своё положение в пространстве.
+    </p>
+
+    <div class="definition">
+        <b>Механическое движение</b> — это изменение положения
+        тела в пространстве относительно других тел
+        с течением времени.
+    </div>
+
+    <h3>Примеры механического движения</h3>
+
+    <div class="cards">
+
+        <div class="info-card">
+            <div class="icon">🚗</div>
+            <h4>Автомобиль</h4>
+            <p>Изменяет положение относительно дороги.</p>
+        </div>
+
+        <div class="info-card blue">
+            <div class="icon">✈️</div>
+            <h4>Самолёт</h4>
+            <p>Перемещается относительно поверхности Земли.</p>
+        </div>
+
+        <div class="info-card pink">
+            <div class="icon">⚽</div>
+            <h4>Мяч</h4>
+            <p>Движется после удара или броска.</p>
+        </div>
+
+        <div class="info-card yellow">
+            <div class="icon">🚶</div>
+            <h4>Человек</h4>
+            <p>Меняет своё положение при ходьбе.</p>
+        </div>
+
+    </div>
+
+    <h3>Движение и покой</h3>
+
+    <p>
+        Если тело не изменяет своего положения относительно
+        выбранного объекта, оно находится в покое относительно
+        этого объекта.
+    </p>
+
+    <div class="example">
+        <b>Пример:</b><br>
+        Пассажир сидит в движущемся автобусе.
+        Относительно автобуса он находится в покое,
+        но относительно дороги движется.
+    </div>
+
+    <div class="motion-box">
+        <div class="road">
+            <div class="car">🚙</div>
+        </div>
+        <div class="motion-caption">
+            Автомобиль меняет положение относительно дороги.
+        </div>
+    </div>
+
+</section>
+
+
+<!-- 2 -->
+
+<section class="lesson-section" id="s2">
+
+    <div class="section-number">ТЕМА 02</div>
+
+    <h2>Что такое материальная точка?</h2>
+
+    <p>
+        Представим, что автомобиль отправился из Бишкека
+        в другой город. Нам нужно рассчитать расстояние
+        и время его движения.
+    </p>
+
+    <p>
+        Нужно ли учитывать точную длину автомобиля,
+        его высоту и ширину? Нет, потому что по сравнению
+        с расстоянием между городами его размеры очень малы.
+    </p>
+
+    <div class="definition">
+        <b>Материальная точка</b> — это тело, размерами которого
+        можно пренебречь в условиях конкретной задачи.
+    </div>
+
+    <h3>Когда тело можно считать материальной точкой?</h3>
+
+    <div class="cards">
+
+        <div class="info-card">
+            <div class="icon">🚆</div>
+            <h4>Можно</h4>
+            <p>
+                Поезд движется между двумя городами.
+                Его размеры несущественны по сравнению
+                с пройденным расстоянием.
+            </p>
+        </div>
+
+        <div class="info-card pink">
+            <div class="icon">🚲</div>
+            <h4>Нельзя</h4>
+            <p>
+                Изучаем вращение колеса велосипеда.
+                Размеры и форма колеса важны.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="example">
+        <b>Запомни:</b> одно и то же тело в одной задаче
+        может быть материальной точкой, а в другой — нет.
+    </div>
+
+</section>
+
+
+<!-- 3 -->
+
+<section class="lesson-section" id="s3">
+
+    <div class="section-number">ТЕМА 03</div>
+
+    <h2>Что такое точка отсчёта?</h2>
+
+    <p>
+        Чтобы определить, движется тело или нет,
+        необходимо выбрать объект, относительно которого
+        мы будем наблюдать за его положением.
+    </p>
+
+    <div class="definition">
+        <b>Тело отсчёта</b> — это тело, относительно которого
+        рассматривают положение и движение других тел.
+    </div>
+
+    <p>
+        Например, если мы наблюдаем за автомобилем,
+        можно выбрать в качестве тела отсчёта дорогу,
+        здание или дерево.
+    </p>
+
+    <h3>Система отсчёта</h3>
+
+    <p>
+        Для описания движения используется система отсчёта.
+        Она включает:
+    </p>
+
+    <ul>
+        <li>Тело отсчёта.</li>
+        <li>Систему координат.</li>
+        <li>Часы для измерения времени.</li>
+    </ul>
+
+    <div class="example">
+        <b>Пример:</b><br>
+        Ты стоишь на остановке и наблюдаешь за автобусом.
+        Остановка — тело отсчёта. Время измеряется часами.
+        Положение автобуса можно определять относительно остановки.
+    </div>
+
+    <div class="formula">
+        <div class="math">📍 + 📐 + ⏱</div>
+        <small>Тело отсчёта + координаты + измерение времени</small>
+    </div>
+
+</section>
+
+
+<!-- 4 -->
+
+<section class="lesson-section" id="s4">
+
+    <div class="section-number">ТЕМА 04</div>
+
+    <h2>Что такое путь?</h2>
+
+    <p>
+        Представим, что человек вышел из дома,
+        прошёл до магазина, затем до школы.
+        Всё расстояние, которое он преодолел,
+        называется путём.
+    </p>
+
+    <div class="definition">
+        <b>Путь (S)</b> — это длина траектории,
+        которую проходит тело во время движения.
+    </div>
+
+    <h3>Обозначение и единицы измерения</h3>
+
+    <div class="formula">
+        <div class="math">S</div>
+        <small>Основная единица измерения — метр (м).</small>
+    </div>
+
+    <table>
+        <tr>
+            <th>Единица</th>
+            <th>Перевод</th>
+        </tr>
+        <tr><td>1 км</td><td>1000 м</td></tr>
+        <tr><td>1 м</td><td>100 см</td></tr>
+        <tr><td>1 см</td><td>10 мм</td></tr>
+        <tr><td>1 км</td><td>100 000 см</td></tr>
+    </table>
+
+    <h3>Пример задачи</h3>
+
+    <div class="example">
+        Человек прошёл 300 метров до магазина
+        и ещё 200 метров до школы.
+
+        <br><br>
+
+        <b>Решение:</b>
+
+        <br>
+        S = 300 + 200
+
+        <br>
+        S = 500 м
+
+        <br><br>
+
+        <b>Ответ:</b> 500 метров.
+    </div>
+
+</section>
+
+
+<!-- 5 -->
+
+<section class="lesson-section" id="s5">
+
+    <div class="section-number">ТЕМА 05</div>
+
+    <h2>Что такое траектория?</h2>
+
+    <p>
+        Если проследить за движением самолёта,
+        можно представить линию, по которой он летит.
+        Такая линия называется траекторией.
+    </p>
+
+    <div class="definition">
+        <b>Траектория</b> — это линия, по которой движется тело.
+    </div>
+
+    <h3>Виды траекторий</h3>
+
+    <div class="cards">
+
+        <div class="info-card blue">
+            <div class="icon">➡️</div>
+            <h4>Прямолинейная</h4>
+            <p>
+                Движение происходит по прямой линии.
+                Например, движение лифта вверх.
+            </p>
+        </div>
+
+        <div class="info-card pink">
+            <div class="icon">〰️</div>
+            <h4>Криволинейная</h4>
+            <p>
+                Движение происходит по кривой линии.
+                Например, полёт брошенного мяча.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="example">
+        <b>Запомни:</b> форма траектории зависит от того,
+        как именно движется тело.
+    </div>
+
+</section>
+
+
+<!-- 6 -->
+
+<section class="lesson-section" id="s6">
+
+    <div class="section-number">ТЕМА 06</div>
+
+    <h2>Что такое перемещение?</h2>
+
+    <p>
+        Представим, что человек вышел из дома,
+        прошёл 100 метров вперёд, а затем вернулся
+        обратно на 100 метров.
+    </p>
+
+    <p>
+        Его путь равен 200 метрам, но конечное положение
+        совпадает с начальным.
+    </p>
+
+    <div class="definition">
+        <b>Перемещение</b> — это направленный отрезок,
+        соединяющий начальное и конечное положение тела.
+    </div>
+
+    <h3>Отличие пути от перемещения</h3>
+
+    <table>
+        <tr>
+            <th>Путь</th>
+            <th>Перемещение</th>
+        </tr>
+        <tr>
+            <td>Длина траектории</td>
+            <td>Направленный отрезок</td>
+        </tr>
+        <tr>
+            <td>Не имеет направления</td>
+            <td>Имеет направление</td>
+        </tr>
+        <tr>
+            <td>Всегда ≥ 0</td>
+            <td>Может быть нулевым</td>
+        </tr>
+    </table>
+
+    <h3>Пример</h3>
+
+    <div class="example">
+        Мальчик прошёл 50 метров на север,
+        затем 30 метров на юг.
+
+        <br><br>
+
+        <b>Путь:</b>
+
+        <br>
+        S = 50 + 30 = 80 м
+
+        <br><br>
+
+        <b>Перемещение:</b>
+
+        <br>
+        50 - 30 = 20 м на север.
+
+    </div>
+
+    <div class="info-card yellow">
+        <h4>Важный факт!</h4>
+        <p>
+            Если тело вернулось в начальную точку,
+            его перемещение равно нулю, даже если
+            оно прошло большое расстояние.
+        </p>
+    </div>
+
+</section>
+
+
+<!-- 7 -->
+
+<section class="lesson-section" id="s7">
+
+    <div class="section-number">ТЕМА 07</div>
+
+    <h2>Что такое скорость?</h2>
+
+    <p>
+        Представим двух спортсменов.
+        Первый пробежал 100 метров за 20 секунд.
+        Второй пробежал 100 метров за 10 секунд.
+    </p>
+
+    <p>
+        Второй спортсмен двигался быстрее,
+        потому что преодолел одинаковое расстояние
+        за меньшее время.
+    </p>
+
+    <div class="definition">
+        <b>Скорость</b> — физическая величина,
+        показывающая, какой путь проходит тело
+        за единицу времени.
+    </div>
+
+    <h3>Обозначение скорости</h3>
+
+    <div class="formula">
+        <div class="math">v</div>
+        <small>Скорость измеряется в м/с или км/ч.</small>
+    </div>
+
+    <h3>Главная формула скорости</h3>
+
+    <div class="formula">
+        <div class="math">v = S / t</div>
+        <small>
+            v — скорость<br>
+            S — путь<br>
+            t — время
+        </small>
+    </div>
+
+    <h3>Пример задачи</h3>
+
+    <div class="example">
+        Автомобиль проехал 120 км за 2 часа.
+        Найдите его скорость.
+
+        <br><br>
+
+        <b>Дано:</b><br>
+        S = 120 км<br>
+        t = 2 ч<br>
+        v = ?
+
+        <br><br>
+
+        <b>Решение:</b>
+
+        <br>
+        v = S / t
+
+        <br>
+        v = 120 / 2
+
+        <br>
+        v = 60 км/ч
+
+        <br><br>
+
+        <b>Ответ:</b> 60 км/ч.
+    </div>
+
+</section>
+
+
+<!-- 8 -->
+
+<section class="lesson-section" id="s8">
+
+    <div class="section-number">ТЕМА 08</div>
+
+    <h2>Все основные формулы движения</h2>
+
+    <p>
+        В физике существует три основные формулы,
+        которые позволяют находить скорость,
+        путь и время.
+    </p>
+
+    <div class="formula">
+        <div class="math">v = S / t</div>
+        <small>Чтобы найти скорость, путь делим на время.</small>
+    </div>
+
+    <div class="formula">
+        <div class="math">S = v × t</div>
+        <small>Чтобы найти путь, скорость умножаем на время.</small>
+    </div>
+
+    <div class="formula">
+        <div class="math">t = S / v</div>
+        <small>Чтобы найти время, путь делим на скорость.</small>
+    </div>
+
+    <h3>Таблица для запоминания</h3>
+
+    <table>
+        <tr>
+            <th>Что ищем?</th>
+            <th>Формула</th>
+        </tr>
+        <tr>
+            <td>Скорость</td>
+            <td>v = S / t</td>
+        </tr>
+        <tr>
+            <td>Путь</td>
+            <td>S = v × t</td>
+        </tr>
+        <tr>
+            <td>Время</td>
+            <td>t = S / v</td>
+        </tr>
+    </table>
+
+    <h3>Равномерное движение</h3>
+
+    <div class="definition">
+        Равномерное движение — это движение,
+        при котором тело за любые равные промежутки
+        времени проходит одинаковые пути.
+    </div>
+
+    <p>
+        При равномерном движении скорость постоянна.
+    </p>
+
+    <table>
+        <tr>
+            <th>Время</th>
+            <th>Путь</th>
+        </tr>
+        <tr><td>1 минута</td><td>60 м</td></tr>
+        <tr><td>2 минуты</td><td>120 м</td></tr>
+        <tr><td>3 минуты</td><td>180 м</td></tr>
+        <tr><td>4 минуты</td><td>240 м</td></tr>
+    </table>
+
+    <h3>Неравномерное движение</h3>
+
+    <div class="definition">
+        Неравномерное движение — это движение,
+        при котором за равные промежутки времени
+        тело проходит разные пути.
+    </div>
+
+    <p>
+        Например, автомобиль сначала едет медленно,
+        затем разгоняется и после этого тормозит.
+    </p>
+
+    <h3>Средняя скорость</h3>
+
+    <div class="formula">
+        <div class="math">vср = Sобщ / tобщ</div>
+        <small>
+            Весь путь делим на всё время движения.
+        </small>
+    </div>
+
+    <div class="example">
+        Автомобиль проехал 100 км за 2 часа,
+        затем 150 км за 3 часа.
+
+        <br><br>
+
+        Sобщ = 100 + 150 = 250 км
+
+        <br>
+        tобщ = 2 + 3 = 5 ч
+
+        <br>
+        vср = 250 / 5 = 50 км/ч
+
+        <br><br>
+
+        <b>Ответ: 50 км/ч.</b>
+    </div>
+
+</section>
+
+
+<!-- 9 -->
+
+<section class="lesson-section" id="s9">
+
+    <div class="section-number">ТЕМА 09</div>
+
+    <h2>Разобранные задачи</h2>
+
+    <p>
+        Рассмотрим несколько типов задач.
+        Сначала попробуй самостоятельно определить,
+        какую формулу необходимо использовать.
+    </p>
+
+    <div class="task">
+        <h4>Задача №1. Найти скорость</h4>
+
+        <p>
+            Пешеход прошёл 600 метров за 10 минут.
+            Найдите скорость.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('a1')">
+            Показать решение
+        </button>
+
+        <div class="answer" id="a1">
+            Дано: S = 600 м, t = 10 мин.
+
+            <br><br>
+
+            v = S / t
+
+            <br>
+            v = 600 / 10 = 60 м/мин.
+
+            <br><br>
+
+            <b>Ответ: 60 м/мин.</b>
+        </div>
+    </div>
+
+    <div class="task">
+        <h4>Задача №2. Найти путь</h4>
+
+        <p>
+            Велосипедист движется со скоростью 5 м/с
+            в течение 20 секунд.
+            Найдите путь.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('a2')">
+            Показать решение
+        </button>
+
+        <div class="answer" id="a2">
+            Дано: v = 5 м/с, t = 20 с.
+
+            <br><br>
+
+            S = v × t
+
+            <br>
+            S = 5 × 20 = 100 м.
+
+            <br><br>
+
+            <b>Ответ: 100 метров.</b>
+        </div>
+    </div>
+
+    <div class="task">
+        <h4>Задача №3. Найти время</h4>
+
+        <p>
+            Автомобиль проехал 240 км со скоростью
+            80 км/ч. Найдите время.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('a3')">
+            Показать решение
+        </button>
+
+        <div class="answer" id="a3">
+            Дано: S = 240 км, v = 80 км/ч.
+
+            <br><br>
+
+            t = S / v
+
+            <br>
+            t = 240 / 80 = 3 часа.
+
+            <br><br>
+
+            <b>Ответ: 3 часа.</b>
+        </div>
+    </div>
+
+    <div class="task">
+        <h4>Задача №4. Средняя скорость</h4>
+
+        <p>
+            Турист прошёл 12 км за 3 часа,
+            а затем ещё 8 км за 2 часа.
+            Найдите среднюю скорость.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('a4')">
+            Показать решение
+        </button>
+
+        <div class="answer" id="a4">
+            Общий путь:
+
+            <br>
+            S = 12 + 8 = 20 км.
+
+            <br><br>
+
+            Общее время:
+
+            <br>
+            t = 3 + 2 = 5 часов.
+
+            <br><br>
+
+            Средняя скорость:
+
+            <br>
+            vср = 20 / 5 = 4 км/ч.
+
+            <br><br>
+
+            <b>Ответ: 4 км/ч.</b>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- 10 -->
+
+<section class="lesson-section" id="s10">
+
+    <div class="section-number">ТЕМА 10</div>
+
+    <h2>Перевод скорости: м/с и км/ч</h2>
+
+    <p>
+        В задачах по физике скорость может быть выражена
+        в метрах в секунду или километрах в час.
+        Поэтому важно научиться переводить единицы.
+    </p>
+
+    <h3>Как перевести км/ч в м/с?</h3>
+
+    <div class="formula">
+        <div class="math">км/ч ÷ 3,6 = м/с</div>
+        <small>
+            Чтобы перевести километры в час
+            в метры в секунду, делим на 3,6.
+        </small>
+    </div>
+
+    <div class="example">
+        Пример: переведём 72 км/ч в м/с.
+
+        <br><br>
+
+        72 / 3,6 = 20 м/с.
+
+        <br><br>
+
+        <b>Ответ: 20 м/с.</b>
+    </div>
+
+    <h3>Как перевести м/с в км/ч?</h3>
+
+    <div class="formula">
+        <div class="math">м/с × 3,6 = км/ч</div>
+        <small>
+            Чтобы перевести метры в секунду
+            в километры в час, умножаем на 3,6.
+        </small>
+    </div>
+
+    <div class="example">
+        Пример: переведём 10 м/с в км/ч.
+
+        <br><br>
+
+        10 × 3,6 = 36 км/ч.
+
+        <br><br>
+
+        <b>Ответ: 36 км/ч.</b>
+    </div>
+
+    <h3>Таблица перевода</h3>
+
+    <table>
+        <tr>
+            <th>км/ч</th>
+            <th>м/с</th>
+        </tr>
+        <tr><td>3,6</td><td>1</td></tr>
+        <tr><td>18</td><td>5</td></tr>
+        <tr><td>36</td><td>10</td></tr>
+        <tr><td>54</td><td>15</td></tr>
+        <tr><td>72</td><td>20</td></tr>
+        <tr><td>90</td><td>25</td></tr>
+        <tr><td>108</td><td>30</td></tr>
+    </table>
+
+    <h3>Интерактивный переводчик скорости</h3>
+
+    <div class="task">
+
+        <p>Введи скорость и выбери направление перевода.</p>
+
+        <input type="number" id="speedInput"
+        placeholder="Например, 72"
+        style="padding:13px;width:100%;border:1px solid #dce7df;border-radius:10px;margin:15px 0;font-size:15px;">
+
+        <select id="speedType"
+        style="padding:13px;width:100%;border:1px solid #dce7df;border-radius:10px;margin-bottom:15px;">
+
+            <option value="km">Из км/ч в м/с</option>
+            <option value="ms">Из м/с в км/ч</option>
+
+        </select>
+
+        <button class="reveal-btn" onclick="convertSpeed()">
+            Перевести
+        </button>
+
+        <div class="answer show" id="convertResult">
+            Здесь появится результат.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- 11 -->
+
+<section class="lesson-section" id="s11">
+
+    <div class="section-number">ТЕМА 11</div>
+
+    <h2>Самостоятельная практика</h2>
+
+    <p>
+        Теперь попробуй решить задачи самостоятельно.
+        Используй формулы, изученные на уроке.
+    </p>
+
+    <div class="task">
+        <h4>Задача №1</h4>
+        <p>
+            Пешеход прошёл 400 метров за 5 минут.
+            Найдите его скорость.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('p1')">
+            Проверить ответ
+        </button>
+
+        <div class="answer" id="p1">
+            v = 400 / 5 = 80 м/мин.
+            <br><b>Ответ: 80 м/мин.</b>
+        </div>
+    </div>
+
+    <div class="task">
+        <h4>Задача №2</h4>
+        <p>
+            Автомобиль движется со скоростью 60 км/ч
+            в течение 2 часов. Найдите путь.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('p2')">
+            Проверить ответ
+        </button>
+
+        <div class="answer" id="p2">
+            S = 60 × 2 = 120 км.
+            <br><b>Ответ: 120 км.</b>
+        </div>
+    </div>
+
+    <div class="task">
+        <h4>Задача №3</h4>
+        <p>
+            Поезд проехал 300 км со скоростью
+            100 км/ч. Найдите время.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('p3')">
+            Проверить ответ
+        </button>
+
+        <div class="answer" id="p3">
+            t = 300 / 100 = 3 часа.
+            <br><b>Ответ: 3 часа.</b>
+        </div>
+    </div>
+
+    <div class="task">
+        <h4>Задача №4</h4>
+        <p>
+            Переведите 36 км/ч в м/с.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('p4')">
+            Проверить ответ
+        </button>
+
+        <div class="answer" id="p4">
+            36 / 3,6 = 10 м/с.
+            <br><b>Ответ: 10 м/с.</b>
+        </div>
+    </div>
+
+    <div class="task">
+        <h4>Задача №5</h4>
+        <p>
+            Велосипедист проехал 120 метров за 20 секунд.
+            Найдите скорость.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('p5')">
+            Проверить ответ
+        </button>
+
+        <div class="answer" id="p5">
+            v = 120 / 20 = 6 м/с.
+            <br><b>Ответ: 6 м/с.</b>
+        </div>
+    </div>
+
+    <div class="task">
+        <h4>Задача №6</h4>
+        <p>
+            Человек прошёл 100 метров вперёд,
+            а затем 40 метров назад.
+            Найдите путь и перемещение.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('p6')">
+            Проверить ответ
+        </button>
+
+        <div class="answer" id="p6">
+            Путь = 100 + 40 = 140 м.
+
+            <br>
+            Перемещение = 100 - 40 = 60 м вперёд.
+
+            <br><b>Ответ: путь 140 м, перемещение 60 м.</b>
+        </div>
+    </div>
+
+    <div class="task">
+        <h4>Задача №7</h4>
+        <p>
+            Автомобиль проехал 180 км за 2 часа,
+            а затем ещё 120 км за 3 часа.
+            Найдите среднюю скорость.
+        </p>
+
+        <button class="reveal-btn"
+        onclick="toggleAnswer('p7')">
+            Проверить ответ
+        </button>
+
+        <div class="answer" id="p7">
+            Общий путь = 180 + 120 = 300 км.
+
+            <br>
+            Общее время = 2 + 3 = 5 ч.
+
+            <br>
+            vср = 300 / 5 = 60 км/ч.
+
+            <br><b>Ответ: 60 км/ч.</b>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- 12 -->
+
+<section class="lesson-section" id="s12">
+
+    <div class="section-number">ТЕМА 12</div>
+
+    <h2>Итоговый тест по физике</h2>
+
+    <p>
+        Проверь свои знания!
+        Тест содержит 20 вопросов по всему уроку.
+        Выбери один правильный вариант ответа.
+    </p>
+
+    <div id="quiz"></div>
+
+    <button class="main-btn" onclick="checkQuiz()">
+        Завершить тест и проверить результат
+    </button>
+
+    <button class="reveal-btn" onclick="resetQuiz()">
+        Пройти тест заново
+    </button>
+
+    <div class="result" id="quizResult">
+        <h3>Результат тестирования</h3>
+        <div id="resultText"></div>
+    </div>
+
+</section>
+
+</main>
+</div>
+
+
+<footer>
+
+    <h3>PHYSICS LAB ⚛</h3>
+
+    <p>
+        Образовательный проект по физике
+        <br>
+        Преподаватель: Джураев Муслим Тариэльевич
+        <br>
+        Механическое движение • Путь • Перемещение • Скорость
+    </p>
+
+    <p>© 2026 Все права защищены</p>
+
+</footer>
+
+
+<script>
+
+// ПЕРЕХОД ПО РАЗДЕЛАМ
+
+function go(id,btn) {
+
+    document.getElementById(id).scrollIntoView({
+        behavior:'smooth'
+    });
+
+    document.querySelectorAll('.menu-item').forEach(item=>{
+        item.classList.remove('active');
+    });
+
+    btn.classList.add('active');
+}
+
+
+// ПРОГРЕСС ПРОСМОТРА
+
+window.addEventListener('scroll',()=>{
+
+    let scrollTop = window.scrollY;
+
+    let height = document.documentElement.scrollHeight -
+                 document.documentElement.clientHeight;
+
+    let progress = height > 0 ? (scrollTop/height)*100 : 0;
+
+    document.getElementById('topProgress').style.width =
+    progress+'%';
+
+    document.getElementById('sideProgress').style.width =
+    progress+'%';
+
+    document.getElementById('progressText').innerText =
+    'Прогресс изучения: '+Math.round(progress)+'%';
+
+});
+
+
+// РАСКРЫТИЕ РЕШЕНИЙ
+
+function toggleAnswer(id) {
+
+    document.getElementById(id).classList.toggle('show');
+
+}
+
+
+// ПЕРЕВОДЧИК СКОРОСТИ
+
+function convertSpeed() {
+
+    let value = Number(document.getElementById('speedInput').value);
+
+    let type = document.getElementById('speedType').value;
+
+    let result = document.getElementById('convertResult');
+
+    if(document.getElementById('speedInput').value.trim()==='' ||
+       !Number.isFinite(value) || value < 0) {
+
+        result.innerHTML = 'Введите корректное неотрицательное число.';
+        return;
+
+    }
+
+    let answer;
+
+    if(type==='km') {
+
+        answer = value/3.6;
+
+        result.innerHTML =
+        value+' км/ч = <b>'+answer.toFixed(2)+' м/с</b>';
+
+    } else {
+
+        answer = value*3.6;
+
+        result.innerHTML =
+        value+' м/с = <b>'+answer.toFixed(2)+' км/ч</b>';
+
+    }
+
+}
+
+
+// ТЕСТ
+
+const questions = [
+
+{
+q:"1. Что такое механическое движение?",
+a:[
+"Изменение температуры тела",
+"Изменение положения тела относительно других тел",
+"Изменение массы тела"
+],
+c:1
+},
+
+{
+q:"2. Что такое материальная точка?",
+a:[
+"Тело, размерами которого можно пренебречь",
+"Очень маленькая частица вещества",
+"Точка на поверхности тела"
+],
+c:0
+},
+
+{
+q:"3. Что такое тело отсчёта?",
+a:[
+"Тело, которое всегда неподвижно",
+"Тело, относительно которого рассматривают движение других тел",
+"Любое движущееся тело"
+],
+c:1
+},
+
+{
+q:"4. Что входит в систему отсчёта?",
+a:[
+"Только часы",
+"Только тело отсчёта",
+"Тело отсчёта, система координат и часы"
+],
+c:2
+},
+
+{
+q:"5. Что такое путь?",
+a:[
+"Длина траектории",
+"Направление движения",
+"Время движения"
+],
+c:0
+},
+
+{
+q:"6. Как обозначается путь?",
+a:[
+"v",
+"S",
+"t"
+],
+c:1
+},
+
+{
+q:"7. Что такое траектория?",
+a:[
+"Скорость движения",
+"Линия, по которой движется тело",
+"Время движения"
+],
+c:1
+},
+
+{
+q:"8. Какие бывают траектории?",
+a:[
+"Большие и маленькие",
+"Прямолинейные и криволинейные",
+"Быстрые и медленные"
+],
+c:1
+},
+
+{
+q:"9. Что такое перемещение?",
+a:[
+"Весь пройденный путь",
+"Направленный отрезок от начального до конечного положения",
+"Время движения"
+],
+c:1
+},
+
+{
+q:"10. Может ли перемещение быть равно нулю?",
+a:[
+"Нет, никогда",
+"Да, если тело вернулось в начальную точку",
+"Только при равномерном движении"
+],
+c:1
+},
+
+{
+q:"11. Как обозначается скорость?",
+a:[
+"S",
+"t",
+"v"
+],
+c:2
+},
+
+{
+q:"12. Какая формула скорости правильная?",
+a:[
+"v = S / t",
+"v = S × t",
+"v = t / S"
+],
+c:0
+},
+
+{
+q:"13. Как найти путь?",
+a:[
+"S = v / t",
+"S = v × t",
+"S = t / v"
+],
+c:1
+},
+
+{
+q:"14. Как найти время?",
+a:[
+"t = S / v",
+"t = S × v",
+"t = v / S"
+],
+c:0
+},
+
+{
+q:"15. В каких единицах измеряется скорость в СИ?",
+a:[
+"Километр",
+"Метр в секунду",
+"Секунда"
+],
+c:1
+},
+
+{
+q:"16. Что такое равномерное движение?",
+a:[
+"За равные промежутки времени проходят одинаковые пути",
+"Скорость постоянно увеличивается",
+"Тело обязательно движется по кругу"
+],
+c:0
+},
+
+{
+q:"17. Что такое неравномерное движение?",
+a:[
+"Тело находится в покое",
+"За равные промежутки времени проходят разные пути",
+"Скорость всегда равна нулю"
+],
+c:1
+},
+
+{
+q:"18. Как перевести 36 км/ч в м/с?",
+a:[
+"Умножить на 3,6",
+"Разделить на 3,6",
+"Прибавить 3,6"
+],
+c:1
+},
+
+{
+q:"19. Сколько будет 10 м/с в км/ч?",
+a:[
+"10 км/ч",
+"36 км/ч",
+"3,6 км/ч"
+],
+c:1
+},
+
+{
+q:"20. Автомобиль проехал 100 км за 2 часа. Какова его скорость?",
+a:[
+"50 км/ч",
+"100 км/ч",
+"200 км/ч"
+],
+c:0
+}
+
+];
+
+
+let userAnswers = {};
+
+function renderQuiz() {
+
+    let container = document.getElementById('quiz');
+
+    container.innerHTML = '';
+
+    userAnswers = {};
+
+    questions.forEach((question,index)=>{
+
+        let html = `
+        <div class="quiz-question" id="question${index}">
+
+            <h4>${question.q}</h4>
+
+            ${question.a.map((option,i)=>`
+
+                <button class="option"
+                onclick="selectAnswer(${index},${i},this)">
+                    ${option}
+                </button>
+
+            `).join('')}
+
+        </div>
+        `;
+
+        container.innerHTML += html;
+
+    });
+
+}
+
+function selectAnswer(question,answer,button) {
+
+    if(document.getElementById('quizResult').style.display==='block') {
+        return;
+    }
+
+    userAnswers[question]=answer;
+
+    let parent = document.getElementById('question'+question);
+
+    parent.querySelectorAll('.option').forEach(btn=>{
+        btn.classList.remove('selected');
+    });
+
+    button.classList.add('selected');
+
+}
+
+
+function checkQuiz() {
+
+    let score=0;
+
+    questions.forEach((question,index)=>{
+
+        let parent = document.getElementById('question'+index);
+
+        let buttons = parent.querySelectorAll('.option');
+
+        buttons.forEach((button,i)=>{
+
+            button.classList.remove('selected');
+
+            if(i===question.c) {
+                button.classList.add('correct');
+            }
+
+            if(userAnswers[index]===i && i!==question.c) {
+                button.classList.add('wrong');
+            }
+
+        });
+
+        if(userAnswers[index]===question.c) {
+            score++;
+        }
+
+    });
+
+    let result = document.getElementById('quizResult');
+
+    result.style.display='block';
+
+    let percent = Math.round(score/questions.length*100);
+
+    let message='';
+
+    if(percent>=90) {
+        message='Превосходно! Ты отлично усвоил тему! 🌟';
+    }
+    else if(percent>=70) {
+        message='Хороший результат! Продолжай изучать физику! 📚';
+    }
+    else if(percent>=50) {
+        message='Неплохо! Но некоторые темы стоит повторить.';
+    }
+    else {
+        message='Рекомендуем ещё раз изучить материал урока.';
+    }
+
+    document.getElementById('resultText').innerHTML=`
+
+        <h2 style="font-size:35px;color:#416c54;margin:15px">
+            ${score} / ${questions.length}
+        </h2>
+
+        <p>Правильных ответов: ${score}</p>
+
+        <p>Результат: ${percent}%</p>
+
+        <h3>${message}</h3>
+
+    `;
+
+    result.scrollIntoView({behavior:'smooth'});
+
+}
+
+
+function resetQuiz() {
+
+    document.getElementById('quizResult').style.display='none';
+
+    renderQuiz();
+
+    document.getElementById('s12').scrollIntoView({
+        behavior:'smooth'
+    });
+
+}
+
+
+// ЗАПУСК ТЕСТА
+
+renderQuiz();
+
+</script>
+
+</body>
+</html>
